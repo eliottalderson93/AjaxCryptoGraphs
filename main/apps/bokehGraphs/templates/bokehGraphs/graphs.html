@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Crypto-Currency Graphs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.css">
+    <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.13.0.min.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.13.0.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-header">
+                <p class="title">Displaying and translating API data into statistical graphs with Python libraries</p>
+                <p class="subtitle">dependencies include: Django, Pandas, Bokeh, and Requests</p>
+            </div>
+            <div class="hero-body">
+                <p class="title is-6">I chose coinmarketcap.api for cryptocurrency data. Below I display basic correlation between coins including
+                    custom buttons for a quick demo, or a custom range and crypto-coin selection for fully abstract functionality.</p>
+            </div>
+        </div>
+    </section>
+    {% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="level">
+                <button id="tether">Tether</button>
+                <button id="bitcoin">Bitcoin</button>
+                <button id="tvb">Tether vs Bitcoin</button>
+                <button id="tvb2">Tether vs Bitcoin during the Boom</button>
+            </div>
+            <div class="level">
+                <div class="level-left" id="graphs">
+
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </section>
+</body>
+{% block javascript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="http://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.js"></script>
+<script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.13.0.min.js"></script>
+<script src="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.13.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        $('#bitcoin').click(function () {
+            $.ajax({
+                url: "http://localhost:8000/components/time/Time/Price/",
+                type: "GET",
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    //console.log(typeof(response)) string
+                    //console.log("success:", resp.status);
+                    $('#graphs').append(response)
+                },
+                error: function (xhr, status) {
+                    console.log("error xhr: ", xhr.status, "status: ", status);
+                }
+            });
+        });
+        $('#tether').click(function () {
+            $.ajax({
+                url: "http://localhost:8000/components/time/Time/Price/tether",
+                type: "GET",
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    //console.log(typeof(response)) string
+                    //console.log("success:", resp.status);
+                    $('#graphs').append(response)
+                },
+                error: function (xhr, status) {
+                    console.log("error xhr: ", xhr.status, "status: ", status);
+                }
+            });        
+        });
+        $('#tvb').click(function () {
+            $.ajax({
+                url: "http://localhost:8000/components/coin/Price/Price/bitcoin/tether",
+                type: "GET",
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    //console.log(typeof(response)) string
+                    //console.log("success:", resp.status);
+                    $('#graphs').append(response)
+                },
+                error: function (xhr, status) {
+                    console.log("error xhr: ", xhr.status, "status: ", status);
+                }
+            });
+        });
+        $('#tvb2').click(function () {
+            $.ajax({
+                url: "http://127.0.0.1:8000/home/test/",
+                type: "GET",
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    var resp = JSON.parse(response)
+                    console.log("success:", resp.status);
+                },
+                error: function (xhr, status) {
+                    console.log("error xhr: ", xhr.status, "status: ", status);
+                }
+            });
+        });
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+    });
+</script> {% endblock %}
+
+</html>
