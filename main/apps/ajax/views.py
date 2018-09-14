@@ -81,6 +81,7 @@ def axis(array,key_str): #this function searches a passed in array for the key_s
     return axis_var
 def joinOnDate(pricePointArrX,pricePointArrY,nameX,nameY,measureKey = "Price",commonKey = "Time", date = True): #pass in pricePoint arrays
     #this function returns an enhanced pricePoint array, where the dates match
+    print("joinOnDate function")
     joinedArr = []
     for obj1 in pricePointArrX:
         date1 = datetime.strptime(obj1[commonKey],"%Y-%m-%d")
