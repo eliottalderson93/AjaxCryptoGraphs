@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^components/', include('apps.components.urls')), #html components, calls 2nd level
     url(r'^api/', include('apps.api.urls')), #1st level api
     url(r'^ajax/', include('apps.ajax.urls')), #2nd level api ajax calls to first level
-    #url(r'^$', myRedirects.home),
+    url(r'^$', myRedirects.home),
 ]
