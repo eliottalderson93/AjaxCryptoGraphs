@@ -56,7 +56,7 @@ $(document).ready(function () {
             begin : null,
             end : null,
         }
-        var url = "http://localhost:8000/components/time/Time/Price";
+        var url = "http://0.0.0.0:8000/components/time/Time/Price";
         //console.log("parameters: ",coinParam,' : ',beginParam,' : ',endParam);
         if(!(validateArray(coinParam,coinNames))){
             errorFlag = false;
@@ -64,7 +64,7 @@ $(document).ready(function () {
             //throw error coin param
         }
         if(endParam.length === 0 && beginParam.length === 0){ //this is the case for the whole coin
-            url += "/" + String(coinParam).toLowerCase();
+            url += "/" + String(coinParam).toLowerCase().replace(/\s/g, '');
                   
         
         }else{ //this is the case for two time parameters
@@ -90,7 +90,7 @@ $(document).ready(function () {
                 messages['end'] = "Please enter a valid end date.";
                 //throw error end param
             }
-            url += "/" + String(coinParam).toLowerCase() + beginUrl + endUrl;
+            url += "/" + String(coinParam).toLowerCase().replace(/\s/g, '') + beginUrl + endUrl;
         }
         if(errorFlag){
             console.log("making request:",url);
@@ -116,7 +116,7 @@ $(document).ready(function () {
     });
     $('#bitcoin').click(function () {
         $.ajax({
-            url: "http://localhost:8000/components/time/Time/Price/",
+            url: "http://0.0.0.0:8000/components/time/Time/Price/",
             type: "GET",
             crossDomain: true,
             xhrFields: {
@@ -132,7 +132,7 @@ $(document).ready(function () {
     });
     $('#tether').click(function () {
         $.ajax({
-            url: "http://localhost:8000/components/time/Time/Price/tether",
+            url: "http://0.0.0.0:8000/components/time/Time/Price/tether",
             type: "GET",
             crossDomain: true,
             xhrFields: {
@@ -148,7 +148,7 @@ $(document).ready(function () {
     });
     $('#tvb').click(function () {
         $.ajax({
-            url: "http://localhost:8000/components/coin/Price/Price/bitcoin/tether",
+            url: "http://0.0.0.0:8000/components/coin/Price/Price/bitcoin/tether",
             type: "GET",
             crossDomain: true,
             xhrFields: {
@@ -164,7 +164,7 @@ $(document).ready(function () {
     });
     $('#tvb2').click(function () {
         $.ajax({
-            url: "http://127.0.0.1:8000/components/time/Time/Price/bitcoin/1483228800000/1514764800000",
+            url: "http://0.0.0.0:8000/components/time/Time/Price/bitcoin/1483228800000/1514764800000",
             type: "GET",
             crossDomain: true,
             xhrFields: {
