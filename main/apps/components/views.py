@@ -9,7 +9,6 @@ from bokeh.models.sources import ColumnDataSource
 from bokeh.models import HoverTool
 from django.core.serializers.json import DjangoJSONEncoder
 def timePlot(request,xkey,ykey,coin = False,begin = False, end = False):
-    print("you are in the time component view")
     baseURL = "http://18.220.161.116:8000/ajax/time/"
     baseName = "Bitcoin"
     ajaxRoute = baseURL + str(xkey) + "/" + str(ykey) + "/"
@@ -69,9 +68,7 @@ def compareCoinPlot(request,xkey,ykey,coinX = False, coinY = False,begin = False
     if(end):
         ajaxRoute += str(end)
     #originally ajaxDataSource, now is a get route into a column data source. ajaxDataSource is good for real time data
-    print("built the route, getting data from: ", ajaxRoute)
     jsonArr = requests.get(ajaxRoute).json() # ["x"][0],jsonDict["y"][0]
-    print("comparePlot data from api: ",jsonArr[0],"\nLength of the Data:",len(jsonArr))
     x, y, date = parseArr(jsonArr)
     df = pd.DataFrame({'x': x, 'y' : y , 'date' : date, 'xLabel' : jsonArr[0]['xName'],'yLabel' : jsonArr[0]['yName']})
     # df = df.fillna(0)
@@ -108,8 +105,6 @@ def equalizeArrays(arr1,arr2):
         arr2.pop(0)
     return arr1, arr2
 def axis(array,key_str): #this function searches a passed in array for the key_str and returns the array of only those values
-    print("axis function\nProcessing Array:\n",array[0])
-    print("filtering by: ",key_str)
     axis_var = [] #can be x or y usually
     for obj in array:
         axis_var.append(obj[key_str])

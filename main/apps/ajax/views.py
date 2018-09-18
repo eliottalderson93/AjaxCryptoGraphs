@@ -9,7 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 #this function calls once and is used when we want to get a bokeh Ajax source for one coin only e.g. price vs time of litecoin
 @csrf_exempt
 def ajaxSource(request, x_key,y_key,coinParam = False, beginParam = False, endParam = False):
-    print("you are in the ajaxSource view")
     output = {
         "x" : [None],
         "y" : [None]
@@ -24,14 +23,11 @@ def ajaxSource(request, x_key,y_key,coinParam = False, beginParam = False, endPa
             apiURL += "/" + str(beginParam)
         if(endParam):
             apiURL += "/" + str(endParam)
-        print("api URL call from ajaxSource:",apiURL)
         rawData = requests.get(apiURL).json()
     else: #calls default
         #print("there is NOT coinParam")
-        print("api URL call from ajaxSource:",apiURL)
         rawData = requests.get(apiURL).json()
     if (rawData['response'] != 200): #tells failed api call
-        print("bad response, not 200")
         pass #lets output be None
     else:
         #processes raw Data into x and y axes
@@ -44,7 +40,6 @@ def ajaxSource(request, x_key,y_key,coinParam = False, beginParam = False, endPa
 #this function calls twice and is used when both axes need a different call e.g. for comparing two coin data
 @csrf_exempt
 def doubleAjaxSource(request, x_key,y_key,coinParamOne, coinParamTwo, beginParam = False, endParam = False):
-    print("you are in the doubleAjaxSource view")
     output = {
         "x" : [None],
         "y" : [None]
@@ -68,20 +63,15 @@ def doubleAjaxSource(request, x_key,y_key,coinParamOne, coinParamTwo, beginParam
         pass #lets output be None
     else:
         #processes raw Data into x and y axes
-        print("x full json: ",list(xRawData.keys()))
-        print("y full json: ",list(yRawData.keys()))
         pricePointArr = joinOnDate(xRawData['PricePoint'],yRawData['PricePoint'],str(x_key),str(y_key))
     return HttpResponse(json.dumps(pricePointArr, sort_keys=True, indent=1, cls=DjangoJSONEncoder),content_type="application/json")
 def axis(array,key_str): #this function searches a passed in array for the key_str and returns the array of only those values
-    print("axis function\nProcessing Array:\n",array[0])
-    print("filtering by: ",key_str)
     axis_var = [] #can be x or y usually
     for obj in array:
         axis_var.append(obj[key_str])
     return axis_var
 def joinOnDate(pricePointArrX,pricePointArrY,nameX,nameY,measureKey = "Price",commonKey = "Time", date = True): #pass in pricePoint arrays
     #this function returns an enhanced pricePoint array, where the dates match
-    print("joinOnDate function")
     joinedArr = []
     for obj1 in pricePointArrX:
         date1 = datetime.strptime(obj1[commonKey],"%Y-%m-%d")
@@ -113,5 +103,4 @@ def joinOnDate(pricePointArrX,pricePointArrY,nameX,nameY,measureKey = "Price",co
                     joinArr.append(joinObj)
                 else:
                     pass #do not join
-    print("joined object example:",joinedArr[0])
     return joinedArr

@@ -43,7 +43,6 @@ def proxyCall(URL):
     apiCall['response'] = response.status_code
     apiCall['PricePoint'] = {}
     if response.status_code != 200: #checks if get was successful and breaks if not
-        print('BAD CODE::',response.status_code)
         return apiCall
     # Translate to JSON
     data = response.json()
