@@ -15,7 +15,7 @@ def ajaxSource(request, x_key,y_key,coinParam = False, beginParam = False, endPa
         "y" : [None]
     }   
     #building the URL to one of the three above routes
-    apiURL = "http://0.0.0.0:8000/api/"
+    apiURL = "http://18.220.161.116/api/"
     if(coinParam): #calls a price vs time
         #x = time y = price
         #print("there is coinParam")
@@ -49,8 +49,8 @@ def doubleAjaxSource(request, x_key,y_key,coinParamOne, coinParamTwo, beginParam
         "x" : [None],
         "y" : [None]
     } 
-    coinOneURL = "http://0.0.0.0:8000/api/"
-    coinTwoURL = "http://0.0.0.0:8000/api/"
+    coinOneURL = "http://18.220.161.116/api/"
+    coinTwoURL = "http://18.220.161.116/api/"
     #build the two calls
     coinOneURL += str(coinParamOne)
     coinTwoURL += str(coinParamTwo)
