@@ -9,7 +9,7 @@ from bokeh.models.sources import ColumnDataSource
 from bokeh.models import HoverTool
 from django.core.serializers.json import DjangoJSONEncoder
 def timePlot(request,xkey,ykey,coin = False,begin = False, end = False):
-    baseURL = "http://18.220.161.116:8000/ajax/time/"
+    baseURL = "http://18.220.161.116/ajax/time/"
     baseName = "Bitcoin"
     ajaxRoute = baseURL + str(xkey) + "/" + str(ykey) + "/"
     if(coin):
@@ -53,7 +53,7 @@ def timePlot(request,xkey,ykey,coin = False,begin = False, end = False):
     return HttpResponse(template.render(context = context, request = request))
 def compareCoinPlot(request,xkey,ykey,coinX = False, coinY = False,begin = False, end = False):
     print("you are in the compare component view")
-    baseURL = "http://18.220.161.116:8000/ajax/compare/"
+    baseURL = "http://18.220.161.116/ajax/compare/"
     ajaxRoute = baseURL + str(xkey) + "/" + str(ykey) + "/"
     baseNameX = "doggo"
     baseNameY = "doggo"

@@ -56,8 +56,17 @@ def doubleAjaxSource(request, x_key,y_key,coinParamOne, coinParamTwo, beginParam
         coinOneURL += "/" + str(endParam)
         coinTwoURL += "/" + str(endParam)
     #call the API
-    xRawData = requests.get(coinOneURL).json()
-    yRawData = requests.get(coinTwoURL).json() 
+    xRawData = {}
+    yRawData = {}
+    try:
+        xRawData = requests.get(coinOneURL).json()
+    except Exception ex:
+        return HttpResponse(json.dumps(ex, sort_keys=True, indent=1, cls=DjangoJSONEncoder),content_type="application/json")
+    try:
+        yRawData = requests.get(coinTwoURL).json()
+    except Exception ex:
+        return HttpResponse(json.dumps(ex, sort_keys=True, indent=1, cls=DjangoJSONEncoder),content_type="application/json")
+     
     #failed api call 
     if((xRawData['response'] != 200) or (yRawData['response'] != 200)):
         pass #lets output be None
