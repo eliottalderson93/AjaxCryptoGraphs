@@ -5,6 +5,7 @@ from time import gmtime, strftime, mktime
 from datetime import date, datetime, time
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.decorators.csrf import csrf_exempt
+from . import AWSsign
 #this function is the second level api route that calls the other routes in the api and serves a dict of x and y values for the ajax bokeh plot on our graphing/rendering server
 #this function calls once and is used when we want to get a bokeh Ajax source for one coin only e.g. price vs time of litecoin
 @csrf_exempt
@@ -23,10 +24,11 @@ def ajaxSource(request, x_key,y_key,coinParam = False, beginParam = False, endPa
             apiURL += "/" + str(beginParam)
         if(endParam):
             apiURL += "/" + str(endParam)
-        rawData = requests.get(apiURL).json()
+        rawData = AWSsign.amazonCall(apiURL).json()
     else: #calls default
         #print("there is NOT coinParam")
-        rawData = requests.get(apiURL).json()
+        rawData = AWSsign.amazonCall(apiURL).json()
+    print(apiURL)
     if (rawData['response'] != 200): #tells failed api call
         pass #lets output be None
     else:
@@ -58,15 +60,16 @@ def doubleAjaxSource(request, x_key,y_key,coinParamOne, coinParamTwo, beginParam
     #call the API
     xRawData = {}
     yRawData = {}
-    try:
-        xRawData = requests.get(coinOneURL).json()
-    except Exception ex:
-        return HttpResponse(json.dumps(ex, sort_keys=True, indent=1, cls=DjangoJSONEncoder),content_type="application/json")
-    try:
-        yRawData = requests.get(coinTwoURL).json()
-    except Exception ex:
-        return HttpResponse(json.dumps(ex, sort_keys=True, indent=1, cls=DjangoJSONEncoder),content_type="application/json")
-     
+    yRawData = requests.get(coinTwoURL).json()
+    xRawData = requests.get(coinOneURL).json()
+    # try:
+    #     xRawData = requests.get(coinOneURL).json()
+    # except Exception ex:
+    #     return HttpResponse(json.dumps(ex, sort_keys=True, indent=1, cls=DjangoJSONEncoder),content_type="application/json")
+    # try:
+    #     yRawData = requests.get(coinTwoURL).json()
+    # except Exception ex:
+    #     return HttpResponse(json.dumps(ex, sort_keys=True, indent=1, cls=DjangoJSONEncoder),content_type="application/json") 
     #failed api call 
     if((xRawData['response'] != 200) or (yRawData['response'] != 200)):
         pass #lets output be None

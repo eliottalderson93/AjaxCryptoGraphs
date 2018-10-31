@@ -8,6 +8,7 @@ from bokeh.embed import components
 from bokeh.models.sources import ColumnDataSource
 from bokeh.models import HoverTool
 from django.core.serializers.json import DjangoJSONEncoder
+from . import AWSsign
 def timePlot(request,xkey,ykey,coin = False,begin = False, end = False):
     baseURL = "http://18.220.161.116/ajax/time/"
     baseName = "Bitcoin"
@@ -20,7 +21,7 @@ def timePlot(request,xkey,ykey,coin = False,begin = False, end = False):
     if(end):
         ajaxRoute += str(end)
     #originally ajaxDataSource, now is a get route into a column data source. ajaxDataSource is good for real time data
-    jsonDict = requests.get(ajaxRoute).json()
+    jsonDict = AWSsign.amazonCall(ajaxRoute).json()
     #print("timePlot data from api:",jsonDict["x"][0],jsonDict["y"][0])
     nDays = 2
     df = pd.DataFrame({'x': pd.to_datetime(jsonDict["x"][::nDays],yearfirst = True), 'y' : jsonDict["y"][::nDays] , 'date' : jsonDict["x"][::nDays]})
@@ -68,7 +69,7 @@ def compareCoinPlot(request,xkey,ykey,coinX = False, coinY = False,begin = False
     if(end):
         ajaxRoute += str(end)
     #originally ajaxDataSource, now is a get route into a column data source. ajaxDataSource is good for real time data
-    jsonArr = requests.get(ajaxRoute).json() # ["x"][0],jsonDict["y"][0]
+    jsonArr = AWSsign.amazonCall(ajaxRoute).json() # ["x"][0],jsonDict["y"][0]
     x, y, date = parseArr(jsonArr)
     df = pd.DataFrame({'x': x, 'y' : y , 'date' : date, 'xLabel' : jsonArr[0]['xName'],'yLabel' : jsonArr[0]['yName']})
     # df = df.fillna(0)

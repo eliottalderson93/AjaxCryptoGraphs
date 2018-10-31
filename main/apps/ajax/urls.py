@@ -12,3 +12,4 @@ urlpatterns = [
     url(r'^compare/(?P<x_key>\w+)/(?P<y_key>\w+)/(?P<coinParamOne>\w+)/(?P<coinParamTwo>\w+)/?$', views.doubleAjaxSource),
     url(r'^compare/(?P<x_key>\w+)/(?P<y_key>\w+)/(?P<coinParamOne>\w+)/(?P<coinParamTwo>\w+)/(?P<beginParam>\w+)/(?P<endParam>\w+)?$', views.doubleAjaxSource),
 ] # http://127.0.0.1:8000/ajax/compare/Price/Price/bitcoin/tether/
+# http://127.0.0.1:8000/ajax/time/Time/Price/bitcoin/
